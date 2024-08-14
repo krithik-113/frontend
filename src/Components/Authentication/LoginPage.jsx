@@ -34,7 +34,7 @@ const LoginPage = ({ setIsLogin, isLogin }) => {
     validate,
     onSubmit: async (values, { resetForm }) => {
       await axios
-        .post("http://localhost:3003/api/admin/login", {
+        .post("https://backend-tpel.onrender.com/api/admin/login", {
           email: values.email,
           password: values.password,
         })
@@ -42,7 +42,7 @@ const LoginPage = ({ setIsLogin, isLogin }) => {
           if (res.data.status && res.data.data.email === values.email) {
             emailDispatch(emailUpdate(res.data.data.email));
             dispatch(saveLoggedInUser(res.data.message));
-          checkingAuth(res.data.data.role)
+            checkingAuth(res.data.data.role);
           } else {
             alert(res.data.message);
           }
@@ -52,14 +52,14 @@ const LoginPage = ({ setIsLogin, isLogin }) => {
   });
   async function checkingAuth(roles) {
     await axios
-      .get("http://localhost:3003/api/admin/auth", {
+      .get("https://backend-tpel.onrender.com/api/admin/auth", {
         headers: {
           Authentication: state.token,
         },
       })
       .then((res) => {
-        console.log(res.data)
-         setCheckAuth(true);
+        console.log(res.data);
+        setCheckAuth(true);
         if (res.data.auth) {
           setIsLogin({ auth: res.data.auth, roles });
         } else {

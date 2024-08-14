@@ -38,7 +38,7 @@ function App() {
   async function RoleOfUser(userEmail, adminEmail, message, setRole, setMsg) {
     if (adminEmail && message) {
       await axios
-        .put("http://localhost:3003/api/details/userrolechange", {
+        .put("https://backend-tpel.onrender.com/api/details/userrolechange", {
           userEmail,
           adminEmail,
           message,
@@ -48,8 +48,8 @@ function App() {
           alert("Request send to admin Successfully ... !");
           const closeBtn = document.getElementById("model-id");
           closeBtn.setAttribute("data-dismiss", "modal");
-          setRole('')
-          setMsg('')
+          setRole("");
+          setMsg("");
         })
         .catch((err) => console.log(err.message));
     } else {

@@ -27,7 +27,9 @@ const Admin = ({ user, setUser }) => {
   useEffect(() => {
     emailState.email &&
       axios
-        .get(`http://localhost:3003/api/details/user/${emailState.email}`)
+        .get(
+          `https://backend-tpel.onrender.com/api/details/user/${emailState.email}`
+        )
         .then((res) => {
           if (res.data.userDetails) {
             setUser(res.data.userDetails);
@@ -42,9 +44,12 @@ const Admin = ({ user, setUser }) => {
   const handleUserRole = async (email, roles) => {
     if (roles) {
       await axios
-        .put(`http://localhost:3003/api/details/user/update/${email}`, {
-          role: roles,
-        })
+        .put(
+          `https://backend-tpel.onrender.com/api/details/user/update/${email}`,
+          {
+            role: roles,
+          }
+        )
         .then((res) => alert(res.data.message))
         .catch((err) => console.log(err.message));
     } else {
@@ -54,7 +59,7 @@ const Admin = ({ user, setUser }) => {
   const handleEmailbox = async () => {
     axios
       .get(
-        `http://localhost:3003/api/details/rolechange/request/${emailState.email}`
+        `https://backend-tpel.onrender.com/api/details/rolechange/request/${emailState.email}`
       )
       .then((res) => {
         if (res.data) {
@@ -72,25 +77,27 @@ const Admin = ({ user, setUser }) => {
 
   const handleDeleteMsg = async (id) => {
    
-      await axios.put(
-        `http://localhost:3003/api/details/msgdelte/${emailState.email}`
-      ).then(res => {
-        setAdminMsg([])
-        let data = [...adminMsg]
-        data = data.filter(val => val.id !== id)
-        localStorage.setItem("admin", JSON.stringify(data));
-      })
-      .catch(err=>console.log(err.message))
+      await axios
+        .put(
+          `https://backend-tpel.onrender.com/api/details/msgdelte/${emailState.email}`
+        )
+        .then((res) => {
+          setAdminMsg([]);
+          let data = [...adminMsg];
+          data = data.filter((val) => val.id !== id);
+          localStorage.setItem("admin", JSON.stringify(data));
+        })
+        .catch((err) => console.log(err.message));
   }
 
   //  delete
   const handleDeleteUser = async (id) => {
-    await axios.delete(
-      `http://localhost:3003/api/delete/user/${id}`)
-      .then(res => {
-        setUser(res.data.users)
+    await axios
+      .delete(`https://backend-tpel.onrender.com/api/delete/user/${id}`)
+      .then((res) => {
+        setUser(res.data.users);
       })
-      .catch(err=>console.log(err.message))
+      .catch((err) => console.log(err.message));
   }
 
   return (
@@ -128,7 +135,7 @@ const Admin = ({ user, setUser }) => {
           user.map((val, index) => {
             return (
               <tbody key={index}>
-                <tr  data-toggle="modal" data-target="#exampleModal" onClick={()=>handleEditingUser(val._id)}>
+                <tr>
                   <th scope="row">{index + 1}</th>
                   <td>{val.firstName + " " + val.lastName}</td>
                   <td>{val.email}</td>
@@ -146,7 +153,16 @@ const Admin = ({ user, setUser }) => {
                   </td>
                   <td>
                     {emailState.email === val.email ? (
-                      ""
+                      <div>
+                        <button
+                          className="btn btn-primary"
+                          data-toggle="modal"
+                          data-target="#exampleModal"
+                          onClick={() => handleEditingUser(val._id)}
+                        >
+                          Edit
+                        </button>
+                      </div>
                     ) : (
                       <div>
                         <button

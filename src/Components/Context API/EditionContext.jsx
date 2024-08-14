@@ -17,9 +17,11 @@ export const EditionContext = ({ children }) => {
   const [id, setId] = useState("");
  async function handleEditingUser(id) {
    await axios
-     .get(`http://localhost:3003/api/edit/getinfo/${emailState.email}`)
+     .get(
+       `https://backend-tpel.onrender.com/api/edit/getinfo/${emailState.email}`
+     )
      .then((res) => {
-       setId(res.data.message._id); 
+       setId(res.data.message._id);
        setFName(res.data.message.firstName);
        setLName(res.data.message.lastName);
        setEmail(res.data.message.email);
@@ -37,7 +39,7 @@ export const EditionContext = ({ children }) => {
        alert("Invalid email address");
      } else {
        await axios
-         .put(`http://localhost:3003/api/edit/user/${userId}`, {
+         .put(`https://backend-tpel.onrender.com/api/edit/user/${userId}`, {
            firstName: fname,
            lastName: lname,
            password,

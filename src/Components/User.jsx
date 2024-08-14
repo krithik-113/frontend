@@ -28,7 +28,9 @@ const User = ({ RoleOfUser }) => {
   useEffect(() => {
     emailState.email &&
       axios
-        .get(`http://localhost:3003/api/details/user/${emailState.email}`)
+        .get(
+          `https://backend-tpel.onrender.com/api/details/user/${emailState.email}`
+        )
         .then((res) => {
           const user = [...User];
           user.push(res.data.Data);
@@ -39,7 +41,7 @@ const User = ({ RoleOfUser }) => {
 
   async function handleRoleOfUser() {
     await axios
-      .post("http://localhost:3003/api/details/rolechange")
+      .post("https://backend-tpel.onrender.com/api/details/rolechange")
       .then((res) => {
         if (res.data.namesOfAdmin) {
           setAdmins(res.data.namesOfAdmin);

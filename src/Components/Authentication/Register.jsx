@@ -34,7 +34,7 @@ const Register = ({ handleClickRefresh }) => {
     validate,
     onSubmit: (values, { resetForm }) => {
       axios
-        .post("http://localhost:3003/api/admin/register", {
+        .post("https://backend-tpel.onrender.com/api/admin/register", {
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email,
