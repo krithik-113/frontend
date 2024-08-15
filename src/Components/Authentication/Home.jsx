@@ -20,10 +20,10 @@ const Home = () => {
               <b> JWT </b>local authentication(email, password)
             </li>
             <li>
-              <b>Roles</b> (admin, moderator, client)
+              <b>Roles</b> (admin, user)
             </li>
             <li>
-              <b>Authorization</b> (admin, moderator and user routes)
+              <b>Authorization</b> (admin and user, user routes)
             </li>
             <li>
               <b>Mongoose</b> (ORM for MongoDB)
@@ -37,9 +37,6 @@ const Home = () => {
             </li>
             <li>
               <b>Redirect</b> to same page after login.
-            </li>
-            <li>
-              <b>React Toastify</b>
             </li>
             <li>
               <b>Validating</b> user input server side
