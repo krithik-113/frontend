@@ -12,7 +12,6 @@ import Reports from './Components/assest/Reports'
 function App() {
   const [isLogin, setIsLogin] = useState({});
    const [user, setUser] = useState([]);
- 
   const navigate = useNavigate();
 
    function handleClickRefresh() {
@@ -35,7 +34,7 @@ function App() {
     }
   }, [isLogin.auth]);
 
-  async function RoleOfUser(userEmail, adminEmail, message, setRole, setMsg) {
+  async function RoleOfUser(userEmail, adminEmail, message, setMsg) {
     if (adminEmail && message) {
       await axios
         .put("https://backend-tpel.onrender.com/api/details/userrolechange", {
@@ -44,12 +43,13 @@ function App() {
           message,
         })
         .then((res) => {
-          navigate("/user");
-          alert("Request send to admin Successfully ... !");
-          const closeBtn = document.getElementById("model-id");
-          closeBtn.setAttribute("data-dismiss", "modal");
-          setRole("");
           setMsg("");
+          if (res.data.message) {
+            alert(res.data.message)
+          } else {
+             alert("Request send to admin Successfully ... !");
+          }
+          
         })
         .catch((err) => console.log(err.message));
     } else {
@@ -83,7 +83,7 @@ function App() {
         <Route path="/register" element={<Register handleClickRefresh={handleClickRefresh} />} />
         <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
         <Route path="/user" element={<User RoleOfUser={RoleOfUser} />} />
-        <Route path="/admin" element={<Admin user={user} setUser={setUser} />} />
+        <Route path="/admin" element={<Admin user={user} setUser={setUser}  />} />
         <Route path="/reports" element={<Reports  user={user}/>} />
         <Route path="/*" element={<NotFound />} />
       </Routes>

@@ -128,7 +128,7 @@ const User = ({ RoleOfUser }) => {
               <label>*Required</label>
               <br />
               <select onChange={(e) => setRole(e.target.value)}>
-                <option></option>
+                <option>Choose...</option>
                 {admin.length &&
                   admin.map((val, index) => {
                     return (
@@ -166,7 +166,7 @@ const User = ({ RoleOfUser }) => {
                 type="button"
                 className="btn btn-primary"
                 onClick={() =>
-                  RoleOfUser(emailState.email, role, msg, setRole, setMsg)
+                  RoleOfUser(emailState.email, role, msg, setMsg)
                 }
               >
                 Sent Request

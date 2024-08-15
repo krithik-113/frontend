@@ -23,7 +23,7 @@ const Admin = ({ user, setUser }) => {
   } = useContext(EditContext);
   const emailState = useSelector((state) => state.email);
   const [role, setRole] = useState();
-  const [adminMsg, setAdminMsg] = useState(JSON.parse(localStorage.getItem("admin")) || [])
+  const [adminMsg, setAdminMsg] = useState([])
   useEffect(() => {
     emailState.email &&
       axios
@@ -63,11 +63,10 @@ const Admin = ({ user, setUser }) => {
       )
       .then((res) => {
         if (res.data) {
-          if (res.data.message && res.data.userEmail && res.data.id) {
-            const admin = [...adminMsg];
-            admin.push(res.data);
-            setAdminMsg(admin);
-            localStorage.setItem("admin", JSON.stringify(admin));
+          if (res.data.request.length) {
+            setAdminMsg(res.data.request);
+          } else {
+            setAdminMsg(res.data.message)
           }
         }
       })
@@ -79,14 +78,8 @@ const Admin = ({ user, setUser }) => {
    
       await axios
         .put(
-          `https://backend-tpel.onrender.com/api/details/msgdelte/${emailState.email}`
-        )
-        .then((res) => {
-          setAdminMsg([]);
-          let data = [...adminMsg];
-          data = data.filter((val) => val.id !== id);
-          localStorage.setItem("admin", JSON.stringify(data));
-        })
+          `https://backend-tpel.onrender.com/api/details/msgdelete/${emailState.email}`, { id })
+        .then(res=>handleEmailbox())
         .catch((err) => console.log(err.message));
   }
 
@@ -104,13 +97,7 @@ const Admin = ({ user, setUser }) => {
     <div>
       <header style={{ display: "flex", justifyContent: "space-between" }}>
         <h1>Admin</h1>
-        <Link to="/reports">
-          <h3
-          // data-toggle="modal" data-target="#exampleModal"
-          >
-            Reports
-          </h3>
-        </Link>
+        <Link to="/reports"><h3>Reports </h3> </Link>
         <h3>
           <EmailOutlinedIcon
             onClick={handleEmailbox}
@@ -211,7 +198,7 @@ const Admin = ({ user, setUser }) => {
               </button>
             </div>
             <div className="modal-body">
-              {adminMsg && adminMsg.length ? (
+              {adminMsg && adminMsg.length && typeof adminMsg !== 'string' ? (
                 adminMsg.map((val, index) => {
                   return (
                     <div
@@ -238,7 +225,7 @@ const Admin = ({ user, setUser }) => {
                   );
                 })
               ) : (
-                <h6>No message received...!</h6>
+                  <h6>{adminMsg}</h6>
               )}
             </div>
             <div className="modal-footer">
