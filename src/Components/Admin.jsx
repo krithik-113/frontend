@@ -63,7 +63,7 @@ const Admin = ({ user, setUser }) => {
       )
       .then((res) => {
         if (res.data) {
-          if (res.data.request.length) {
+          if (res.data.request && res.data.request.length) {
             setAdminMsg(res.data.request);
           } else {
             setAdminMsg(res.data.message)
