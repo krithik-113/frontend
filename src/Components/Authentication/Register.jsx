@@ -38,7 +38,7 @@ const Register = ({ handleClickRefresh }) => {
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email.toLowerCase().trim(),
-          password: values.password,
+          password: values.password.toLowerCase().trim(),
         })
         .then((res) => {
           if (res.data.message) {

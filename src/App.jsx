@@ -15,11 +15,9 @@ function App() {
   const navigate = useNavigate();
 
    function handleClickRefresh() {
-     
        window.location.reload();
        navigate("/login");
-    
-   }
+  }
 
   useEffect(() => {
      
@@ -53,7 +51,7 @@ function App() {
         })
         .catch((err) => console.log(err.message));
     } else {
-      alert("Must be one admin and message also!");
+      alert("One Admin is required and message also!");
     }
   }
 

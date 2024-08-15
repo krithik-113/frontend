@@ -35,8 +35,8 @@ const LoginPage = ({ setIsLogin, isLogin }) => {
     onSubmit: async (values, { resetForm }) => {
       await axios
         .post("https://backend-tpel.onrender.com/api/admin/login", {
-          email: values.email,
-          password: values.password,
+          email: values.email.toLowerCase().trim(),
+          password: values.password.toLowerCase().trim(),
         })
         .then((res) => {
           if (res.data.status && res.data.data.email === values.email) {
