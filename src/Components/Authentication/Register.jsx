@@ -37,7 +37,7 @@ const Register = ({ handleClickRefresh }) => {
         .post("https://backend-tpel.onrender.com/api/admin/register", {
           firstName: values.firstName,
           lastName: values.lastName,
-          email: values.email,
+          email: values.email.toLowerCase().trim(),
           password: values.password,
         })
         .then((res) => {
