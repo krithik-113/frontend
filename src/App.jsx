@@ -27,7 +27,7 @@ function App() {
      
     if (isLogin.auth) {
       if (isLogin.roles === "admin") {
-        user.length && user.length < 2 && notifyInfo(`Hi First Login credentials always be admin`)
+        user.length === 1 && notifyInfo(`Hi First Login credentials always be admin`)
         navigate("/admin");
       } else {
         navigate("/user");
