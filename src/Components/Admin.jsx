@@ -20,7 +20,8 @@ const Admin = ({ user, setUser }) => {
     setSalary,
     handleSaveChanges,
     id,
-    notify
+    notify,
+    notifyInfo
   } = useContext(EditContext);
   const emailState = useSelector((state) => state.email);
   const [role, setRole] = useState();
@@ -57,7 +58,7 @@ const Admin = ({ user, setUser }) => {
         .then((res) => notify(res.data.message))
         .catch((err) => console.log(err.message));
     } else {
-      alert("Nothing is there to save...");
+      notifyInfo("Nothing is there to save...");
     }
   };
   const handleEmailbox = async () => {
