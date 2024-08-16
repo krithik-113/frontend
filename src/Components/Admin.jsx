@@ -6,7 +6,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditContext from "./Context API/EditionContext";
 
-const Admin = ({ user, setUser }) => {
+const Admin = () => {
   const {
     fname,
     setFName,
@@ -21,30 +21,20 @@ const Admin = ({ user, setUser }) => {
     handleSaveChanges,
     id,
     notify,
-    notifyInfo
+    setUser,
+    user,
+    notifyInfo,
+    notifyanoInfo,
   } = useContext(EditContext);
   const emailState = useSelector((state) => state.email);
   const [role, setRole] = useState();
   const [adminMsg, setAdminMsg] = useState([]);
 
   useEffect(() => {
-    async function Details() {
-      emailState.email &&
-        (await axios
-          .get(
-            `https://backend-tpel.onrender.com/api/details/user/${emailState.email}`
-          )
-          .then((res) => {
-            if (res.data.userDetails) {
-              setUser(res.data.userDetails);
-            } else {
-              setUser(res.data.Data);
-            }
-          })
-          .catch((err) => console.log(err.message)));
-    }
-    Details()
-  }, []);
+   user.length === 1 &&
+     notifyanoInfo(`Hi first login credentials always be admin`);
+},[user.length])
+ 
 
   const handleUserRole = async (email, roles) => {
     if (roles) {

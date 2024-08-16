@@ -1,3 +1,4 @@
+import { useContext, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -11,11 +12,25 @@ import {
   YAxis,
   Line,
 } from "recharts";
+import EditContext from "../Context API/EditionContext";
+import { Link } from "react-router-dom";
 
-const Reports = ({ user }) => {
-
+const Reports = () => {
+  const { user, Details } = useContext(EditContext)
+  useEffect(() => {
+   Details();
+ },[])
+    
+  
+  
   return (
-    <div className="charts">
+    <div>
+      <div style={{ textAlign: "center" }}>
+        <Link to="/admin" style={{textDecoration:"none"}}>
+          <button className="btn btn-primary">Back</button>
+        </Link>
+      </div>
+      <div className="charts">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           width={500}
@@ -73,6 +88,7 @@ const Reports = ({ user }) => {
           <Line type="monotone" dataKey="salary" stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 };

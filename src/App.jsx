@@ -4,19 +4,16 @@ import Register from "./Components/Authentication/Register";
 import Home from "./Components/Authentication/Home";
 import User from "./Components/User";
 import NotFound from "./Components/NotFound";
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import Admin from "./Components/Admin";
-import axios from "axios";
 import Reports from './Components/assest/Reports'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import EditContext from "./Components/Context API/EditionContext";
 
 function App() {
   const [isLogin, setIsLogin] = useState({});
-   const [user, setUser] = useState([]);
+  
   const navigate = useNavigate();
-  const {notifyInfo,notify,notifyErr,notifyWar} = useContext(EditContext)
 
    function handleClickRefresh() {
        window.location.reload();
@@ -27,7 +24,6 @@ function App() {
      
     if (isLogin.auth) {
       if (isLogin.roles === "admin") {
-        user.length === 1 && notifyInfo(`Hi First Login credentials always be admin`)
         navigate("/admin");
       } else {
         navigate("/user");
@@ -36,29 +32,6 @@ function App() {
       navigate("/login");
     }
   }, [isLogin.auth]);
-
-  async function RoleOfUser(userEmail, adminEmail, message, setMsg) {
-    if (adminEmail && message) {
-      await axios
-        .put("https://backend-tpel.onrender.com/api/details/userrolechange", {
-          userEmail,
-          adminEmail,
-          message,
-        })
-        .then((res) => {
-          setMsg("");
-          if (res.data.message) {
-            notifyWar(res.data.message)
-          } else {
-             notify("Request send to admin Successfully ... !");
-          }
-          
-        })
-        .catch((err) => console.log(err.message));
-    } else {
-      notifyErr("One Admin is required and message also!");
-    }
-  }
 
   return (
     <div className="container">
@@ -85,9 +58,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register handleClickRefresh={handleClickRefresh} />} />
         <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
-        <Route path="/user" element={<User RoleOfUser={RoleOfUser} />} />
-        <Route path="/admin" element={<Admin user={user} setUser={setUser}  />} />
-        <Route path="/reports" element={<Reports  user={user}/>} />
+        <Route path="/user" element={<User />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/reports" element={<Reports />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </div>

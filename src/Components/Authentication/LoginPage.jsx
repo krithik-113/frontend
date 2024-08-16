@@ -27,7 +27,8 @@ const LoginPage = ({ setIsLogin }) => {
   const dispatch = useDispatch();
   const emailDispatch = useDispatch();
 
-  const { notify, notifyErr, notifyInfo } = useContext(EditContext);
+  const { notify, notifyErr, notifyInfo, Details } =
+    useContext(EditContext);
 
   const formik = useFormik({
     initialValues: {
@@ -64,9 +65,11 @@ const LoginPage = ({ setIsLogin }) => {
         },
       })
       .then((res) => {
-         if (res.data.auth) {
+        if (res.data.auth) {
+           Details();
           setIsLogin({ auth: res.data.auth, roles });
-          notify("Successfully Logged In")
+           
+           notify("Successfully Logged In")
         } else {
           setIsLogin({ auth: res.data.auth, roles });
         }

@@ -17,6 +17,8 @@ export const EditionContext = ({ children }) => {
 
   const [id, setId] = useState("");
 
+   const [user, setUser] = useState([]);
+
    const notify = (content) => {
      toast.success(content, {
        position: "top-right",
@@ -56,6 +58,19 @@ export const EditionContext = ({ children }) => {
      transition: Bounce,
    });
   };
+  const notifyanoInfo = (content) => {
+    toast.info(content, {
+      position: "top-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
+  };
   const notifyWar = (content) => {
     toast.warn(content, {
       position: "top-center",
@@ -69,7 +84,7 @@ export const EditionContext = ({ children }) => {
       transition: Bounce,
     });
   }
- async function handleEditingUser(id) {
+ async function handleEditingUser() {
    await axios
      .get(
        `https://backend-tpel.onrender.com/api/edit/getinfo/${emailState.email}`
@@ -114,7 +129,42 @@ export const EditionContext = ({ children }) => {
    } else {
      notifyWar("Input fields can't be empty");
    }
- }
+  }
+   async function Details() {
+     await axios
+         .get(
+           `https://backend-tpel.onrender.com/api/details/user/${emailState.email}`
+         )
+         .then((res) => {
+           if (res.data.userDetails) {
+             setUser(res.data.userDetails);
+           } else {
+             setUser(res.data.Data);
+           }
+         })
+         .catch((err) => console.log(err.message))
+  }
+  async function RoleOfUser(userEmail, adminEmail, message, setMsg) {
+    if (adminEmail && message) {
+      await axios
+        .put("https://backend-tpel.onrender.com/api/details/userrolechange", {
+          userEmail,
+          adminEmail,
+          message,
+        })
+        .then((res) => {
+          setMsg("");
+          if (res.data.message) {
+            notifyWar(res.data.message);
+          } else {
+            notify("Request send to admin Successfully ... !");
+          }
+        })
+        .catch((err) => console.log(err.message));
+    } else {
+      notifyErr("One Admin is required and message also!");
+    }
+  }
   return (
     <EditContext.Provider
       value={{
@@ -134,6 +184,11 @@ export const EditionContext = ({ children }) => {
         notifyErr,
         notifyInfo,
         notifyWar,
+        Details,
+        user,
+        setUser,
+        notifyanoInfo,
+        RoleOfUser,
       }}
     >
       {children}

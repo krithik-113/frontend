@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import EditContext from "./Context API/EditionContext";
 
-const User = ({ RoleOfUser }) => {
+const User = () => {
   const {
     fname,
     setFName,
@@ -17,7 +17,8 @@ const User = ({ RoleOfUser }) => {
     setExp,
     setSalary,
     handleSaveChanges,
-    id
+    id,
+    RoleOfUser,
   } = useContext(EditContext);
   const emailState = useSelector((state) => state.email);
   const [User, setUser] = useState([]);
