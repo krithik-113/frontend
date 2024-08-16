@@ -4,15 +4,19 @@ import Register from "./Components/Authentication/Register";
 import Home from "./Components/Authentication/Home";
 import User from "./Components/User";
 import NotFound from "./Components/NotFound";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Admin from "./Components/Admin";
 import axios from "axios";
 import Reports from './Components/assest/Reports'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import EditContext from "./Components/Context API/EditionContext";
 
 function App() {
   const [isLogin, setIsLogin] = useState({});
    const [user, setUser] = useState([]);
   const navigate = useNavigate();
+  const {notifyInfo,notify,notifyErr,notifyWar} = useContext(EditContext)
 
    function handleClickRefresh() {
        window.location.reload();
@@ -23,6 +27,7 @@ function App() {
      
     if (isLogin.auth) {
       if (isLogin.roles === "admin") {
+        user.length && user.length < 2 && notifyInfo(`Hi First Login credentials always be admin`)
         navigate("/admin");
       } else {
         navigate("/user");
@@ -43,15 +48,15 @@ function App() {
         .then((res) => {
           setMsg("");
           if (res.data.message) {
-            alert(res.data.message)
+            notifyWar(res.data.message)
           } else {
-             alert("Request send to admin Successfully ... !");
+             notify("Request send to admin Successfully ... !");
           }
           
         })
         .catch((err) => console.log(err.message));
     } else {
-      alert("One Admin is required and message also!");
+      notifyErr("One Admin is required and message also!");
     }
   }
 
@@ -75,7 +80,7 @@ function App() {
           </div>
         </div>
       </nav>
-
+        <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register handleClickRefresh={handleClickRefresh} />} />

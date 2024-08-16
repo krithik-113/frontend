@@ -165,9 +165,7 @@ const User = ({ RoleOfUser }) => {
                 id="model-id"
                 type="button"
                 className="btn btn-primary"
-                onClick={() =>
-                  RoleOfUser(emailState.email, role, msg, setMsg)
-                }
+                onClick={() => RoleOfUser(emailState.email, role, msg, setMsg)}
               >
                 Sent Request
               </button>
@@ -267,6 +265,10 @@ const User = ({ RoleOfUser }) => {
                 <option value="4 year's">4 year's</option>
                 <option value="5 year's">5 year's</option>
                 <option value="6 year's">6 year's</option>
+                <option value="7 year's">7 year's</option>
+                <option value="8 year's">8 year's</option>
+                <option value="9 year's">9 year's</option>
+                <option value="10 year's">10 year's</option>
               </select>
 
               <label htmlFor="salary">Salary:</label>
@@ -281,6 +283,13 @@ const User = ({ RoleOfUser }) => {
                 <option value="35,000k">35,000k</option>
                 <option value="45,000k">45,000k</option>
                 <option value="55,000k">55,000k</option>
+                <option value="60,000k">60,000k</option>
+                <option value="65,000k">65,000k</option>
+                <option value="70,000k">70,000k</option>
+                <option value="75,000k">75,000k</option>
+                <option value="80,000k">80,000k</option>
+                <option value="85,000k">85,000k</option>
+                <option value="90,000k">90,000k</option>
               </select>
             </div>
             <div className="modal-footer">
@@ -294,6 +303,7 @@ const User = ({ RoleOfUser }) => {
               <button
                 type="button"
                 className="btn btn-primary"
+                data-dismiss="model"
                 onClick={() => handleSaveChanges(id)}
               >
                 Save changes

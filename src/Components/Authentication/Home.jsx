@@ -35,13 +35,12 @@ const Home = () => {
               Using sessions to <b>persist login </b> after server reboot (using
               Mongo Store)
             </li>
-            <li>
-              <b>Redirect</b> to same page after login.
-            </li>
+            <li><b>React Toastify</b></li>
+            
             <li>
               <b>Validating</b> user input server side
             </li>
-            <li>Handling error (ex: 404)</li>
+           
             <div className="end"> Have a nice day ...! 😊</div>
           </ol>
         </div>

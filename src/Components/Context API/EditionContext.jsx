@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { toast, Bounce } from "react-toastify";
 
 const EditContext = createContext({})
 
@@ -15,6 +16,59 @@ export const EditionContext = ({ children }) => {
   const [salary, setSalary] = useState("");
 
   const [id, setId] = useState("");
+
+   const notify = (content) => {
+     toast.success(content, {
+       position: "top-right",
+       autoClose: 3000,
+       hideProgressBar: false,
+       closeOnClick: true,
+       pauseOnHover: true,
+       draggable: true,
+       progress: undefined,
+       theme: "colored",
+       transition: Bounce,
+     });
+  };
+  const notifyErr = (content) => {
+     toast.error(content, {
+       position: "top-right",
+       autoClose: 3000,
+       hideProgressBar: false,
+       closeOnClick: true,
+       pauseOnHover: true,
+       draggable: true,
+       progress: undefined,
+       theme: "colored",
+       transition: Bounce,
+     });
+  }
+  const notifyInfo = (content) => {
+   toast.info(content, {
+     position: "top-center",
+     autoClose: 5000,
+     hideProgressBar: false,
+     closeOnClick: true,
+     pauseOnHover: true,
+     draggable: true,
+     progress: undefined,
+     theme: "colored",
+     transition: Bounce,
+   });
+  };
+  const notifyWar = (content) => {
+    toast.warn(content, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }
  async function handleEditingUser(id) {
    await axios
      .get(
@@ -31,13 +85,18 @@ export const EditionContext = ({ children }) => {
      .catch((err) => console.log(err.message));
  }
 
-    async function handleSaveChanges(userId) {
-        let matches = exp.match(/\d+/g) 
-        let matchSal = salary.match(/\d+/g) 
+  async function handleSaveChanges(userId) {
+        
    if (fname && lname && password && email && exp && salary) {
      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-       alert("Invalid email address");
+       notifyErr("Invalid email address");
      } else {
+       let matches = '',
+         matchSal = '';
+       if (exp && salary) {
+         matches = exp.toString().match(/\d+/g);
+         matchSal = salary.toString().match(/\d+/g);
+       }
        await axios
          .put(`https://backend-tpel.onrender.com/api/edit/user/${userId}`, {
            firstName: fname,
@@ -48,13 +107,12 @@ export const EditionContext = ({ children }) => {
            salary: Number(matchSal[0] + matchSal[1]),
          })
          .then((res) => {
-           alert(res.data.message);
-           window.location.reload();
+           notify('Changes saved successfully you can click on close to continue..');
          })
          .catch((err) => console.log(err.message));
      }
    } else {
-     alert("Input fields can't be empty");
+     notifyWar("Input fields can't be empty");
    }
  }
   return (
@@ -71,7 +129,11 @@ export const EditionContext = ({ children }) => {
         setExp,
         setSalary,
         handleSaveChanges,
-        id
+        id,
+        notify,
+        notifyErr,
+        notifyInfo,
+        notifyWar,
       }}
     >
       {children}

@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { saveLoggedInUser } from "../../app/reducer/tokenSlice";
 import { emailUpdate } from "../../app/reducer/emailSlice";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import EditContext from "../Context API/EditionContext";
 
 
 const validate = (values) => {
@@ -19,12 +20,14 @@ const validate = (values) => {
   return errors;
 };
 
-const LoginPage = ({ setIsLogin, isLogin }) => {
-  
+const LoginPage = ({ setIsLogin }) => {
   const state = useSelector((state) => state.token);
-  const [checkAuth,setCheckAuth] = useState(false)
+  const [checkAuth, setCheckAuth] = useState(false);
+  const [role, setRole] = useState('')
   const dispatch = useDispatch();
-  const emailDispatch = useDispatch()
+  const emailDispatch = useDispatch();
+
+  const { notify, notifyErr, notifyInfo } = useContext(EditContext);
 
   const formik = useFormik({
     initialValues: {
@@ -42,14 +45,17 @@ const LoginPage = ({ setIsLogin, isLogin }) => {
           if (res.data.status && res.data.data.email === values.email) {
             emailDispatch(emailUpdate(res.data.data.email));
             dispatch(saveLoggedInUser(res.data.message));
-            checkingAuth(res.data.data.role);
+            setRole(res.data.data.role);
+            setCheckAuth(true);
+            notifyInfo("Click Check Authorization Button to go further");
           } else {
-            alert(res.data.message);
+            notifyErr(res.data.message);
           }
         })
         .catch((err) => console.log(err.message));
     },
   });
+
   async function checkingAuth(roles) {
     await axios
       .get("https://backend-tpel.onrender.com/api/admin/auth", {
@@ -58,17 +64,16 @@ const LoginPage = ({ setIsLogin, isLogin }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
-        setCheckAuth(true);
-        if (res.data.auth) {
+         if (res.data.auth) {
           setIsLogin({ auth: res.data.auth, roles });
+          notify("Successfully Logged In")
         } else {
           setIsLogin({ auth: res.data.auth, roles });
         }
       })
       .catch((err) => console.log(err.message));
   }
-   
+
   return (
     <>
       <div className="login-page">
@@ -107,13 +112,21 @@ const LoginPage = ({ setIsLogin, isLogin }) => {
               required
             />
             <p style={{ color: "red" }}>{formik.errors.password}</p>
-          </div><button
-            onClick={formik.handleSubmit}
-            type="button"
-            className="btn btn-primary"
-          >
-            {checkAuth ? "Check Authorization" : "Login"}
-          </button>
+          </div>
+          {checkAuth ? (
+            <button
+              onClick={() => checkingAuth(role)}
+              type="button"
+              className="btn btn-primary"
+            >
+              Check Authorization
+            </button>
+          ) : (
+            <button
+              onClick={formik.handleSubmit}
+              type="button"
+              className="btn btn-primary">Login</button>
+          )}
         </form>
       </div>
       <div className="footer">

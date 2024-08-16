@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import EditContext from "../Context API/EditionContext";
 
 const validate = (values) => {
   const errors = {};
@@ -22,6 +23,7 @@ const validate = (values) => {
 };
 
 const Register = ({ handleClickRefresh }) => {
+  const {notifyErr,notify} = useContext(EditContext)
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -42,8 +44,9 @@ const Register = ({ handleClickRefresh }) => {
         })
         .then((res) => {
           if (res.data.message) {
-            alert(res.data.message);
+            notifyErr(res.data.message);
           } else {
+            notify(`Hello ${values.firstName+" "+values.lastName} you have successfully registered and try to login. Thank You...!`)
             navigate("/");
             resetForm();
           }

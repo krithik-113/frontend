@@ -1,6 +1,6 @@
 import axios from "axios";
-import {Link } from "react-router-dom"
-import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -20,26 +20,30 @@ const Admin = ({ user, setUser }) => {
     setSalary,
     handleSaveChanges,
     id,
+    notify
   } = useContext(EditContext);
   const emailState = useSelector((state) => state.email);
   const [role, setRole] = useState();
-  const [adminMsg, setAdminMsg] = useState([])
-  useEffect(() => {
-    emailState.email &&
-      axios
-        .get(
-          `https://backend-tpel.onrender.com/api/details/user/${emailState.email}`
-        )
-        .then((res) => {
-          if (res.data.userDetails) {
-            setUser(res.data.userDetails);
-          } else {
-            setUser(res.data.Data);
-          }
-        })
-        .catch((err) => console.log(err.message));
+  const [adminMsg, setAdminMsg] = useState([]);
 
-  }, [emailState.email]);
+  useEffect(() => {
+    async function Details() {
+      emailState.email &&
+        (await axios
+          .get(
+            `https://backend-tpel.onrender.com/api/details/user/${emailState.email}`
+          )
+          .then((res) => {
+            if (res.data.userDetails) {
+              setUser(res.data.userDetails);
+            } else {
+              setUser(res.data.Data);
+            }
+          })
+          .catch((err) => console.log(err.message)));
+    }
+    Details()
+  }, []);
 
   const handleUserRole = async (email, roles) => {
     if (roles) {
@@ -50,12 +54,12 @@ const Admin = ({ user, setUser }) => {
             role: roles,
           }
         )
-        .then((res) => alert(res.data.message))
+        .then((res) => notify(res.data.message))
         .catch((err) => console.log(err.message));
     } else {
-      alert("Nothing is there to save...")
+      alert("Nothing is there to save...");
     }
-  }
+  };
   const handleEmailbox = async () => {
     axios
       .get(
@@ -66,38 +70,44 @@ const Admin = ({ user, setUser }) => {
           if (res.data.request && res.data.request.length) {
             setAdminMsg(res.data.request);
           } else {
-            setAdminMsg(res.data.message)
+            setAdminMsg(res.data.message);
           }
         }
       })
       .catch((err) => console.log(err.message));
-  }
-
+  };
 
   const handleDeleteMsg = async (id) => {
-   
-      await axios
-        .put(
-          `https://backend-tpel.onrender.com/api/details/msgdelete/${emailState.email}`, { id })
-        .then(res=>handleEmailbox())
-        .catch((err) => console.log(err.message));
-  }
+    await axios
+      .put(
+        `https://backend-tpel.onrender.com/api/details/msgdelete/${emailState.email}`,
+        { id }
+      )
+      .then((res) => {
+        notify("Message deleted successfully");
+        handleEmailbox()
+      })
+      .catch((err) => console.log(err.message));
+  };
 
   //  delete
-  const handleDeleteUser = async (id) => {
+  const handleDeleteUser = async (id,name) => {
     await axios
       .delete(`https://backend-tpel.onrender.com/api/delete/user/${id}`)
       .then((res) => {
         setUser(res.data.users);
+        notify(`User record of ${name} is Deleted Successfully`);
       })
       .catch((err) => console.log(err.message));
-  }
+  };
 
   return (
     <div>
       <header style={{ display: "flex", justifyContent: "space-between" }}>
         <h1>Admin</h1>
-        <Link to="/reports"><h3>Reports </h3> </Link>
+        <Link to="/reports">
+          <h3>Reports </h3>{" "}
+        </Link>
         <h3>
           <EmailOutlinedIcon
             onClick={handleEmailbox}
@@ -162,7 +172,12 @@ const Admin = ({ user, setUser }) => {
                         <button
                           style={{ width: "40%" }}
                           className="btn btn-danger"
-                          onClick={() => handleDeleteUser(val._id)}
+                          onClick={() =>
+                            handleDeleteUser(
+                              val._id,
+                              val.firstName + " " + val.lastName
+                            )
+                          }
                         >
                           Delete
                         </button>
@@ -198,7 +213,7 @@ const Admin = ({ user, setUser }) => {
               </button>
             </div>
             <div className="modal-body">
-              {adminMsg && adminMsg.length && typeof adminMsg !== 'string' ? (
+              {adminMsg && adminMsg.length && typeof adminMsg !== "string" ? (
                 adminMsg.map((val, index) => {
                   return (
                     <div
@@ -225,7 +240,7 @@ const Admin = ({ user, setUser }) => {
                   );
                 })
               ) : (
-                  <h6>{adminMsg}</h6>
+                <h6>{adminMsg}</h6>
               )}
             </div>
             <div className="modal-footer">
@@ -332,6 +347,10 @@ const Admin = ({ user, setUser }) => {
                 <option value="4 year's">4 year's</option>
                 <option value="5 year's">5 year's</option>
                 <option value="6 year's">6 year's</option>
+                <option value="7 year's">7 year's</option>
+                <option value="8 year's">8 year's</option>
+                <option value="9 year's">9 year's</option>
+                <option value="10 year's">10 year's</option>
               </select>
 
               <label htmlFor="salary">Salary:</label>
@@ -346,6 +365,13 @@ const Admin = ({ user, setUser }) => {
                 <option value="35,000k">35,000k</option>
                 <option value="45,000k">45,000k</option>
                 <option value="55,000k">55,000k</option>
+                <option value="60,000k">60,000k</option>
+                <option value="65,000k">65,000k</option>
+                <option value="70,000k">70,000k</option>
+                <option value="75,000k">75,000k</option>
+                <option value="80,000k">80,000k</option>
+                <option value="85,000k">85,000k</option>
+                <option value="90,000k">90,000k</option>
               </select>
             </div>
             <div className="modal-footer">
