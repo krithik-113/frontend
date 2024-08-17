@@ -47,7 +47,7 @@ export const EditionContext = ({ children }) => {
   }
   const notifyInfo = (content) => {
    toast.info(content, {
-     position: "top-center",
+     position: "top-left",
      autoClose: 5000,
      hideProgressBar: false,
      closeOnClick: true,
@@ -73,7 +73,7 @@ export const EditionContext = ({ children }) => {
   };
   const notifyWar = (content) => {
     toast.warn(content, {
-      position: "top-center",
+      position: "top-left",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,

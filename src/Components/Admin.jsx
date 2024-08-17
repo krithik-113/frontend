@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -25,27 +25,35 @@ const Admin = () => {
     user,
     notifyInfo,
     notifyanoInfo,
+    notifyWar,
   } = useContext(EditContext);
   const emailState = useSelector((state) => state.email);
-  const [role, setRole] = useState();
+  const [role, setRole] = useState("");
   const [adminMsg, setAdminMsg] = useState([]);
 
   useEffect(() => {
-   user.length === 1 &&
-     notifyanoInfo(`Hi first login credentials always be admin`);
-},[user.length])
- 
+    user.length === 1 &&
+      notifyanoInfo(`Hi first login credentials always be admin`);
+  }, [user.length]);
 
   const handleUserRole = async (email, roles) => {
     if (roles) {
       await axios
         .put(
-          `https://backend-tpel.onrender.com/api/details/user/update/${email}`,
+          `https://backend-tpel.onrender.com/api/details/user/update/${emailState.email}`,
           {
             role: roles,
+            userEmail: email,
           }
         )
-        .then((res) => notify(res.data.message))
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.warning) {
+            notifyWar(res.data.warning);
+          } else {
+            notify(res.data.message);
+          }
+        })
         .catch((err) => console.log(err.message));
     } else {
       notifyInfo("Nothing is there to save...");
@@ -76,13 +84,13 @@ const Admin = () => {
       )
       .then((res) => {
         notify("Message deleted successfully");
-        handleEmailbox()
+        handleEmailbox();
       })
       .catch((err) => console.log(err.message));
   };
 
   //  delete
-  const handleDeleteUser = async (id,name) => {
+  const handleDeleteUser = async (id, name) => {
     await axios
       .delete(`https://backend-tpel.onrender.com/api/delete/user/${id}`)
       .then((res) => {
@@ -132,8 +140,8 @@ const Admin = () => {
                       val.role
                     ) : (
                       <select onChange={(e) => setRole(e.target.value)}>
-                        <option value={val.role}>{val.role}</option>
-                        <option value={val.role === "admin" ? "user" : "admin"}>
+                        <option>{val.role}</option>
+                        <option>
                           {val.role === "admin" ? "user" : "admin"}
                         </option>
                       </select>
