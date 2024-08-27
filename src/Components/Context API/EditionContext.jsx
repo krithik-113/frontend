@@ -137,10 +137,8 @@ export const EditionContext = ({ children }) => {
          )
          .then((res) => {
            if (res.data.userDetails) {
-             setUser(res.data.userDetails);
-           } else {
-             setUser(res.data.Data);
-           }
+             setUser(res.data.userDetails.reverse());
+           } 
          })
          .catch((err) => console.log(err.message))
   }

@@ -53,10 +53,13 @@ function App() {
           </div>
         </div>
       </nav>
-        <ToastContainer />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register handleClickRefresh={handleClickRefresh} />} />
+        <Route
+          path="/register"
+          element={<Register handleClickRefresh={handleClickRefresh} />}
+        />
         <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
         <Route path="/user" element={<User />} />
         <Route path="/admin" element={<Admin />} />

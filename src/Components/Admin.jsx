@@ -228,6 +228,7 @@ const Admin = () => {
                           <span style={{ color: "red" }}>Message:- </span>
                           {val.message}
                         </h6>
+                        <hr/>
                       </div>
                       <div>
                         <DeleteOutlineOutlinedIcon
