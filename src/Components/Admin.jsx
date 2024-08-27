@@ -94,7 +94,7 @@ const Admin = () => {
     await axios
       .delete(`https://backend-tpel.onrender.com/api/delete/user/${id}`)
       .then((res) => {
-        setUser(res.data.users);
+        setUser(res.data.users.reverse());
         notify(`User record of ${name} is Deleted Successfully`);
       })
       .catch((err) => console.log(err.message));
