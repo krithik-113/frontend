@@ -6,8 +6,10 @@ import { BrowserRouter } from 'react-router-dom';
 import store from './app/store'
 import { Provider } from 'react-redux';
 import { EditionContext } from './Components/Context API/EditionContext';
+import axios from 'axios';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+axios.defaults.baseURL = "https://backend-tpel.onrender.com";
 root.render(
   <React.StrictMode>
     <Provider store={store}>

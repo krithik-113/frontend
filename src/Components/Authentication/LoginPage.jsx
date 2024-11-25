@@ -38,7 +38,7 @@ const LoginPage = ({ setIsLogin }) => {
     validate,
     onSubmit: async (values, { resetForm }) => {
       await axios
-        .post("https://backend-tpel.onrender.com/api/admin/login", {
+        .post("/api/admin/login", {
           email: values.email.toLowerCase().trim(),
           password: values.password.toLowerCase().trim(),
         })
@@ -58,24 +58,21 @@ const LoginPage = ({ setIsLogin }) => {
   });
 
   async function checkingAuth(roles) {
-    await axios
-      .get("https://backend-tpel.onrender.com/api/admin/auth", {
-        headers: {
-          Authentication: state.token,
-        },
-      })
-      .then((res) => {
-        if (res.data.auth) {
-           Details();
-          setIsLogin({ auth: res.data.auth, roles });
-           
-           notify("Successfully Logged In")
-        } else {
-          setIsLogin({ auth: res.data.auth, roles });
-        }
-      })
-      .catch((err) => console.log(err.message));
-  }
+    try {
+      const { data } = await axios.get("/api/admin/auth", {headers:{Authentication: state.token}})
+      if (data.auth) {
+        Details();
+        localStorage.setItem("token", state.token);
+        setIsLogin({ auth: data.auth, roles,token:localStorage.getItem('token') });
+        notify("Successfully Logged In");
+      } else {
+        setIsLogin({ auth: data.auth, roles });
+      }
+    } catch (error) {
+      console.log("Error Ocurred",error.message)
+    }
+}
+  
 
   return (
     <>

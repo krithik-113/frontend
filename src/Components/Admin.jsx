@@ -38,14 +38,10 @@ const Admin = () => {
 
   const handleUserRole = async (email, roles) => {
     if (roles) {
-      await axios
-        .put(
-          `https://backend-tpel.onrender.com/api/details/user/update/${emailState.email}`,
-          {
+      await axios.put(`/api/details/user/update/${emailState.email}`,{
             role: roles,
             userEmail: email,
-          }
-        )
+          })
         .then((res) => {
           console.log(res.data);
           if (res.data.warning) {
@@ -61,9 +57,7 @@ const Admin = () => {
   };
   const handleEmailbox = async () => {
     axios
-      .get(
-        `https://backend-tpel.onrender.com/api/details/rolechange/request/${emailState.email}`
-      )
+      .get(`/api/details/rolechange/request/${emailState.email}`)
       .then((res) => {
         if (res.data) {
           if (res.data.request && res.data.request.length) {
@@ -78,10 +72,7 @@ const Admin = () => {
 
   const handleDeleteMsg = async (id) => {
     await axios
-      .put(
-        `https://backend-tpel.onrender.com/api/details/msgdelete/${emailState.email}`,
-        { id }
-      )
+      .put(`/api/details/msgdelete/${emailState.email}`, { id })
       .then((res) => {
         notify("Message deleted successfully");
         handleEmailbox();
@@ -92,7 +83,7 @@ const Admin = () => {
   //  delete
   const handleDeleteUser = async (id, name) => {
     await axios
-      .delete(`https://backend-tpel.onrender.com/api/delete/user/${id}`)
+      .delete(`/api/delete/user/${id}`)
       .then((res) => {
         setUser(res.data.users.reverse());
         notify(`User record of ${name} is Deleted Successfully`);

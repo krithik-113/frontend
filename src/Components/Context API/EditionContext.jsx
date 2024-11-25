@@ -86,9 +86,7 @@ export const EditionContext = ({ children }) => {
   }
  async function handleEditingUser() {
    await axios
-     .get(
-       `https://backend-tpel.onrender.com/api/edit/getinfo/${emailState.email}`
-     )
+     .get(`/api/edit/getinfo/${emailState.email}`)
      .then((res) => {
        setId(res.data.message._id);
        setFName(res.data.message.firstName);
@@ -112,8 +110,7 @@ export const EditionContext = ({ children }) => {
          matches = exp.toString().match(/\d+/g);
          matchSal = salary.toString().match(/\d+/g);
        }
-       await axios
-         .put(`https://backend-tpel.onrender.com/api/edit/user/${userId}`, {
+       await axios.put(`/api/edit/user/${userId}`, {
            firstName: fname,
            lastName: lname,
            password,
@@ -132,9 +129,7 @@ export const EditionContext = ({ children }) => {
   }
    async function Details() {
      await axios
-         .get(
-           `https://backend-tpel.onrender.com/api/details/user/${emailState.email}`
-         )
+         .get(`/api/details/user/${emailState.email}`)
          .then((res) => {
            if (res.data.userDetails) {
              setUser(res.data.userDetails.reverse());
@@ -144,8 +139,7 @@ export const EditionContext = ({ children }) => {
   }
   async function RoleOfUser(userEmail, adminEmail, message, setMsg) {
     if (adminEmail && message) {
-      await axios
-        .put("https://backend-tpel.onrender.com/api/details/userrolechange", {
+      await axios.put("/api/details/userrolechange", {
           userEmail,
           adminEmail,
           message,

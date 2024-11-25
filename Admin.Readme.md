@@ -5,8 +5,8 @@ email : krithik@email.com
 password : 123
 
 Admin 2 :-
-email : dummy@email.com
-password : dummy
+email : suresh@email.com
+password : suresh
 
 Note :- 
 -> Without email message from users, Admin can't able to change the role from (user to admin).

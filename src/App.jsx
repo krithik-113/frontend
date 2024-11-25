@@ -18,11 +18,15 @@ function App() {
    function handleClickRefresh() {
        window.location.reload();
        navigate("/login");
+   }
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    setIsLogin({})
   }
 
   useEffect(() => {
-     
-    if (isLogin.auth) {
+    if (isLogin.token) {
       if (isLogin.roles === "admin") {
         navigate("/admin");
       } else {
@@ -31,7 +35,7 @@ function App() {
     } else {
       navigate("/login");
     }
-  }, [isLogin.auth]);
+  }, [isLogin.auth,isLogin.token,isLogin.roles]);
 
   return (
     <div className="container">
@@ -40,15 +44,25 @@ function App() {
           <span className="navbar-brand">(RB-AC) System</span>
           <div className="d-flex">
             <ul>
-              <Link to="/">
+              <Link to="/" onClick={handleLogout}>
                 <li>Home</li>
               </Link>
-              <Link to="/register">
-                <li>Register</li>
-              </Link>
-              <Link to="/login">
-                <li onClick={() => handleClickRefresh("login")}>Log In</li>
-              </Link>
+              {!isLogin.token ? (
+                <>
+                  <Link to="/register">
+                    <li>Register</li>
+                  </Link>
+                  <Link to="/login">
+                    <li onClick={() => handleClickRefresh("login")}>Log In</li>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link onClick={handleLogout}>
+                    <li>Logout</li>
+                  </Link>
+                </>
+              )}
             </ul>
           </div>
         </div>
